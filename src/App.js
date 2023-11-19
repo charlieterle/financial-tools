@@ -1,7 +1,12 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import { nanoid } from 'nanoid'
 import Investment from './components/Investment'
-import Input from './components/Input'
+
+const INPUT_TYPES = {
+  'name': 'Investment Name',
+  'value': 'Investment Value',
+  'percent': 'Target Percentage',
+};
 
 function App(props) {
   const [investments, setInvestments] = useState(props.investments);
@@ -15,6 +20,15 @@ function App(props) {
       purchase: '',
     }
     setInvestments([...investments, newInvestment]);
+  }
+
+  function editInvestment(edit_id, property, value) {
+    for (let investment of investments) {
+      if (investment.id === edit_id) {
+        investment[property] = value;
+      }
+    }
+    console.log(investments);
   }
 
   function deleteInvestment(delete_id) {
@@ -34,6 +48,7 @@ function App(props) {
       window.alert('You must enter at least 2 investments before rebalancing');
       return;
     }
+    console.log(investments);
   }
 
   const investmentList = investments
@@ -46,11 +61,11 @@ function App(props) {
         percent={investment.value}
         purchase={investment.purchase}
         deleteInvestment={deleteInvestment}
+        editInvestment={editInvestment}
+        inputs={INPUT_TYPES}
       />
     ));
-  
-  console.log(investments);
-  
+
   return (
     <div className='rebalanceapp'>
       <h1>Investment Rebalancer</h1>

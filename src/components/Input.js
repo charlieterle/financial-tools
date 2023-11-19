@@ -7,7 +7,17 @@ export default function Input(props) {
         setContent(e.target.value);
     }
 
+    function handleBlur(e) {
+        props.editInvestment(props.investment_id, props.className, e.target.value);
+    }
+
     return (
-        <input type='text' placeholder={props.placeholder}></input>
+        <input
+            type='text' 
+            placeholder={props.placeholder}
+            onChange={handleChange}
+            onBlur={handleBlur}
+        >
+        </input>
     )
 }
