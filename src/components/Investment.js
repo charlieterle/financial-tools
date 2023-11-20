@@ -2,9 +2,9 @@ import React, {useState} from 'react'
 
 export default function Investment(props) {
     const [state, setState] = useState({
-        name: '',
-        value: '',
-        percent: ''
+        investmentName: props.investmentName,
+        value: props.value,
+        percent: props.percent
     });
 
     function handleChange(e) {
@@ -32,7 +32,7 @@ export default function Investment(props) {
         />
     ));
 
-    const editingTemplate = (
+    return (
         <li>
             {inputs}
             <button
@@ -41,15 +41,5 @@ export default function Investment(props) {
                 Delete this investment
             </button>
         </li>
-    );
-
-    const resultsTemplate = (
-        <li>
-            {props.name}: {`${props.purchase < 0 ? 'SELL' : 'BUY'}`} {props.purchase}
-        </li>
-    );
-
-    return (
-        props.isEditing ? editingTemplate : resultsTemplate
     );
 }

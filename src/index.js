@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 
 const INITIAL_DATA = [
-  {id: 'first-investment', name: '', value: '', percent: ''},
+  {id: 'first-investment', investmentName: '', value: '', percent: '', purchase: null},
 ];
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

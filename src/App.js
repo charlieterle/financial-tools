@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid'
 import Investment from './components/Investment'
 
 const INPUT_TYPES = {
-  'name': 'Investment Name',
+  'investmentName': 'Investment Name',
   'value': 'Investment Value',
   'percent': 'Target Percentage',
 };
@@ -15,7 +15,7 @@ function App(props) {
   function addInvestment() {
     const newInvestment = {
       id: `${nanoid()}`,
-      name: '',
+      investmentName: '',
       value: '',
       percent: '',
       purchase: null,
@@ -26,7 +26,7 @@ function App(props) {
   function editInvestment(edit_id, property, value) {
     const updatedInvestments = investments.map((investment) => {
       if (edit_id === investment.id) {
-        return {...investment, [property]: value};
+        return { ...investment, [property]: value };
       }
       else {
         return investment;
@@ -48,10 +48,32 @@ function App(props) {
   }
 
   function rebalance() {
+    if (!isEditing) {
+      setEditing(true);
+      return
+    }
     if (investments.length < 2) {
       window.alert('You must enter at least 2 investments before rebalancing');
       return;
     }
+    const total_percent = investments
+      .map((investment) => Number(investment.percent))
+      .reduce((percent_sum, percent) => percent_sum + percent, 0);
+    if (total_percent !== 100) {
+      window.alert('The percentages of all investments must add up to 100')
+      return;
+    }
+
+    const total_value = investments
+      .map((investment) => Number(investment.value))
+      .reduce((value_sum, value) => value_sum + value, 0);
+
+    const updatedInvestments = investments
+      .map((investment) => {return {...investment, purchase: total_value * investment.percent / 100 - investment.value}});
+
+    console.log(total_value, updatedInvestments);
+
+    setInvestments(updatedInvestments);
     setEditing(false);
   }
 
@@ -60,9 +82,9 @@ function App(props) {
       <Investment
         id={investment.id}
         key={investment.id}
-        name={investment.name}
+        investmentName={investment.investmentName}
         value={investment.value}
-        percent={investment.value}
+        percent={investment.percent}
         purchase={investment.purchase}
         deleteInvestment={deleteInvestment}
         editInvestment={editInvestment}
@@ -71,12 +93,14 @@ function App(props) {
       />
     ));
 
-  return (
-    <div className='rebalanceapp'>
-      <h1>Investment Rebalancer</h1>
-      <h2>Investment List</h2>
+  const resultsList = investments.map((investment) =>
+    <li key={`${investment.id}-results`}>
+      {investment.investmentName}: {`${investment.purchase < 0 ? `SELL ${-investment.purchase}` : `BUY ${investment.purchase}`}`}
+    </li>);
+
+  const editingTemplate = (
+    <div>
       <p>Enter your investments below, along with their current value and target percentage</p>
-      <p>Read about rebalancing TODO LINK NEEDED &lt;here&gt; for information on how to use this</p>
       <ul id='investmentlist'>
         {investmentList}
         <button
@@ -90,6 +114,29 @@ function App(props) {
       >
         Submit
       </button>
+    </div>
+  );
+
+  const resultsTemplate = (
+    <div>
+      <p>Your investments and their respective buy/sell amounts are listed below.</p>
+      <ul>
+        {resultsList}
+      </ul>
+      <button
+        className='button rebalance'
+        onClick={rebalance}
+      >
+        Edit Investments
+      </button>
+    </div>
+  );
+
+  return (
+    <div className='rebalanceapp'>
+      <h1>Investment Rebalancer</h1>
+      <h2>Investment List</h2>
+      {isEditing ? editingTemplate : resultsTemplate}
     </div>
   );
 }
