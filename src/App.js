@@ -10,6 +10,7 @@ const INPUT_TYPES = {
 
 function App(props) {
   const [investments, setInvestments] = useState(props.investments);
+  const [isEditing, setEditing] = useState(true);
 
   function addInvestment() {
     const newInvestment = {
@@ -17,18 +18,21 @@ function App(props) {
       name: '',
       value: '',
       percent: '',
-      purchase: '',
+      purchase: null,
     }
     setInvestments([...investments, newInvestment]);
   }
 
   function editInvestment(edit_id, property, value) {
-    for (let investment of investments) {
-      if (investment.id === edit_id) {
-        investment[property] = value;
+    const updatedInvestments = investments.map((investment) => {
+      if (edit_id === investment.id) {
+        return {...investment, [property]: value};
       }
-    }
-    console.log(investments);
+      else {
+        return investment;
+      }
+    })
+    setInvestments(updatedInvestments);
   }
 
   function deleteInvestment(delete_id) {
@@ -48,7 +52,7 @@ function App(props) {
       window.alert('You must enter at least 2 investments before rebalancing');
       return;
     }
-    console.log(investments);
+    setEditing(false);
   }
 
   const investmentList = investments
@@ -63,6 +67,7 @@ function App(props) {
         deleteInvestment={deleteInvestment}
         editInvestment={editInvestment}
         inputs={INPUT_TYPES}
+        isEditing={isEditing}
       />
     ));
 
@@ -74,11 +79,10 @@ function App(props) {
       <p>Read about rebalancing TODO LINK NEEDED &lt;here&gt; for information on how to use this</p>
       <ul id='investmentlist'>
         {investmentList}
-        <li>
-          <button
-            className='button addinvestment'
-            onClick={addInvestment}>Add a new investment</button>
-        </li>
+        <button
+          className='button addinvestment'
+          onClick={addInvestment}>Add a new investment
+        </button>
       </ul>
       <button
         className='button rebalance'
