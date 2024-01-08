@@ -4,7 +4,7 @@ import Investment from './components/Investment'
 
 const INPUT_TYPES = {
   'investmentName': 'Investment Name',
-  'value': 'Investment Value',
+  'value': 'Current Value',
   'percent': 'Target Percentage',
 };
 
