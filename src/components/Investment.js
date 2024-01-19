@@ -36,7 +36,7 @@ export default function Investment(props) {
         <li>
             {inputs}
             <button
-                className='button deleteinvestment'
+                className='button delete-button'
                 onClick={() => props.deleteInvestment(props.id)}>
                 Delete this investment
             </button>
