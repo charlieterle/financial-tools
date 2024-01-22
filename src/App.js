@@ -103,13 +103,13 @@ function App(props) {
       <p>Enter your investments below, along with their current value and target percentage</p>
       <ul id='investmentlist'>
         {investmentList}
-        <button
-          className='button addinvestment'
-          onClick={addInvestment}>Add a new investment
-        </button>
       </ul>
       <button
-        className='button rebalance'
+        className='button add-entry-button'
+        onClick={addInvestment}>Add a new investment
+      </button>
+      <button
+        className='button submit-button'
         onClick={rebalance}
       >
         Submit
@@ -124,7 +124,7 @@ function App(props) {
         {resultsList}
       </ul>
       <button
-        className='button rebalance'
+        className='button reset-button'
         onClick={rebalance}
       >
         Edit Investments

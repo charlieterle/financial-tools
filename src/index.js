@@ -5,6 +5,7 @@ import App from './App';
 
 const INITIAL_DATA = [
   {id: 'first-investment', investmentName: '', value: '', percent: '', purchase: null},
+  {id: 'second-investment', investmentName: '', value: '', percent: '', purchase: null},
 ];
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
